@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {FcTodoList} from "react-icons/fc";
 import Todo from "./Todo";
 import {db} from "./firebase";
-import {collection, query, doc, onSnapshot, updateDoc, addDoc} from 'firebase/firestore';
+import {collection, query, doc, onSnapshot, updateDoc, addDoc, deleteDoc} from 'firebase/firestore';
 
 const style = {
     bg: "h-screen w-screen p-4 bg-gradient-to-r from-[#d6cfc7] to-[#222021]",
@@ -53,6 +53,11 @@ function App() {
         })
     };
 
+    //Delete_todos_in_firebase
+    const deleteTodo = async (id) => {
+        await deleteDoc(doc(db, 'todos', id))
+    };
+
     return (
         <div className={style.bg}>
             <div className={style.container}>
@@ -65,7 +70,10 @@ function App() {
                 </form>
                 <ul>
                     {todos.map((todo, index) => (
-                            <Todo key={index} todo={todo} toggleComplete={toggleComplete}/>
+                            <Todo key={index}
+                                  todo={todo}
+                                  toggleComplete={toggleComplete}
+                                  deleteTodo={deleteTodo}/>
                         )
                     )}
                 </ul>
