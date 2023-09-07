@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {FcTodoList} from "react-icons/fc";
 import Todo from "./Todo";
 
@@ -14,6 +14,11 @@ const style = {
 
 function App() {
     const [todos, setTodos] = useState(['Learn React', 'Grind Leetcode']);
+
+    //Read_todo_from_firebase
+    useEffect(() => {
+
+    }, []);
 
     return (
         <div className={style.bg}>
