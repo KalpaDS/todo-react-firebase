@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {FcTodoList} from "react-icons/fc";
 import Todo from "./Todo";
 import {db} from "./firebase";
-import {collection, query, onSnapshot} from 'firebase/firestore';
+import {collection, query, doc, onSnapshot, updateDoc} from 'firebase/firestore';
 
 const style = {
     bg: "h-screen w-screen p-4 bg-gradient-to-r from-[#d6cfc7] to-[#222021]",
@@ -17,6 +17,7 @@ const style = {
 function App() {
     const [todos, setTodos] = useState([]);
 
+
     //Read_todo_from_firebase
     useEffect(() => {
         const q = query(collection(db, 'todos'));
@@ -30,6 +31,13 @@ function App() {
         return () => unsubscribe()
     }, []);
 
+    //Update_todos_in_firbase
+    const toggleComplete = async (todo) => {
+        await updateDoc(doc(db, 'todos', todo.id), {
+            completed: !todo.completed
+        })
+    };
+
     return (
         <div className={style.bg}>
             <div className={style.container}>
@@ -40,7 +48,7 @@ function App() {
                 </form>
                 <ul>
                     {todos.map((todo, index) => (
-                            <Todo key={index} todo={todo}/>
+                        <Todo key={index} todo={todo} toggleComplete={toggleComplete}/>
                         )
                     )}
                 </ul>
