@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {FcTodoList} from "react-icons/fc";
 import Todo from "./Todo";
+import {db} from "./firebase";
+import {collection, query, onSnapshot} from 'firebase/firestore';
 
 const style = {
     bg: "h-screen w-screen p-4 bg-gradient-to-r from-[#d6cfc7] to-[#222021]",
@@ -10,14 +12,22 @@ const style = {
     input: 'border p-2 w-full text-xl',
     button: 'border p-4 ml-2 text-slate-100',
     count: 'text-center p-2'
-}
+};
 
 function App() {
-    const [todos, setTodos] = useState(['Learn React', 'Grind Leetcode']);
+    const [todos, setTodos] = useState([]);
 
     //Read_todo_from_firebase
     useEffect(() => {
-
+        const q = query(collection(db, 'todos'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            let todoArray = [];
+            querySnapshot.forEach((doc) => {
+                todoArray.push({...doc.data(), id: doc.id})
+            });
+            setTodos(todoArray)
+        });
+        return () => unsubscribe()
     }, []);
 
     return (
