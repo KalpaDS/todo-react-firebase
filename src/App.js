@@ -29,7 +29,7 @@ function App() {
         await addDoc(collection(db, 'todos'), {
             text: input,
             completed: false
-        })
+        });
         setInput('')
     };
 
